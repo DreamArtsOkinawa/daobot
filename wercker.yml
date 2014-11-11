@@ -1,0 +1,19 @@
+box: wercker/nodejs
+build:
+  steps:
+    - npm-install
+
+  after-steps:
+    - wantedly/pretty-slack-notify:
+        team: dao
+        token: $SLACK_API_TOKEN
+        channel: $SLACK_NOTIFY_CHANNEL
+deploy:
+  steps:
+    - heroku-deploy
+
+  after-steps:
+    - wantedly/pretty-slack-notify:
+        team: dao
+        token: $SLACK_API_TOKEN
+        channel: $SLACK_NOTIFY_CHANNEL
