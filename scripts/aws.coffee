@@ -48,6 +48,7 @@ getRegionInstances = (region, msg) ->
 
       msg.send "Found #{instances.length} instances for region #{region}..."
 
+      bot_speak = ''
       for instance in instances
         do (instance) ->
           status = _.find statuses, (s) ->
@@ -95,10 +96,11 @@ getRegionInstances = (region, msg) ->
           tags = _.flatten [instance.tagSet?.item ? []]
           name = (_.find tags, (t) -> t.key == 'Name')?.value ? 'missing'
 
-#          msg.send "#{prefix} [#{state}] - #{name} / #{type} [#{devType} #{arch}] / #{dnsName} / #{region} / #{id} - started #{launchTime} #{suffix}"
-          msg.send "#{prefix} [#{state}] - #{name} / #{type} / #{id}"
+          bot_speak += "#{prefix} [#{state}] - #{name} / #{type} / #{id}\n"
 
-defaultRegions = 'us-east-1,us-west-1,us-west-2,eu-west-1,ap-southeast-1,ap-northeast-1,sa-east-1'
+      msg.send "#{bot_speak}" if instances.length > 0
+
+defaultRegions = 'ap-northeast-1,ap-southeast-1,sa-east-1,us-east-1,us-west-1,us-west-2,eu-west-1'
 
 module.exports = (robot) ->
   robot.respond /(^|\W)ec2 status(\z|\W|$)/i, (msg) ->
