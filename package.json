@@ -5,6 +5,8 @@
   "author": "hiromiyagi <hir_miyagi_r@dreamarts.co.jp>",
   "description": "A simple helpful robot for your Company",
   "dependencies": {
+    "aws-sdk": "^2.0.25",
+    "aws2js": "^0.8.3",
     "cron": "^1.0.5",
     "dateformat": "^1.0.8",
     "hubot": "^2.9.3",
@@ -13,10 +15,9 @@
     "hubot-scripts": "^2.5.16",
     "hubot-slack": "^2.2.0",
     "hubot-sushiyuki": "0.0.8",
-    "aws-sdk": "^2.0.25",
-    "underscore": "^1.7.0",
     "moment": "^2.8.3",
-    "aws2js": "^0.8.3"
+    "request": "^2.47.0",
+    "underscore": "^1.7.0"
   },
   "engines": {
     "node": "0.10.x"
