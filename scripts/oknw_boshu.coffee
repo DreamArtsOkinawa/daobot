@@ -22,17 +22,34 @@ class Boshu
     request @url, (err, response, body) ->
       that.api = JSON.parse(body)
 
+  all: ->
+    @kobo().concat @nyusatsu()
+
   kobo: ->
     @api.results.kobo
 
   nyusatsu: ->
     @api.results.nyusatsu
 
+  new: (items)->
+    items.filter((item) => item.new.src)
+
+
 
 module.exports = (robot) ->
 
   boshu = new Boshu
 
+  robot.respond /okinawa boshu$/i, (msg) ->
+    msg.send ("#{item.date} - #{item.title.text}\n#{item.title.href}" for item in boshu.all()).join '\n\n'
+
   robot.respond /okinawa boshu (kobo|nyusatsu)$/i, (msg) ->
     method = msg.match[1]
-    msg.send ("#{item.date} - #{item.title.text} #{item.title.href}" for item in boshu[method]()).join '\n'
+    msg.send ("#{item.date} - #{item.title.text}\n#{item.title.href}" for item in boshu[method]()).join '\n\n'
+
+  robot.respond /okinawa boshu new$/i, (msg) ->
+    msg.send ("#{item.date} - #{item.title.text}\n#{item.title.href}" for item in boshu.new(boshu.all())).join '\n\n'
+
+  robot.respond /okinawa boshu (kobo|nyusatsu) (new)$/i, (msg) ->
+    method = msg.match[1]
+    msg.send ("#{item.date} - #{item.title.text}\n#{item.title.href}" for item in boshu.new(boshu[method]())).join '\n\n'
