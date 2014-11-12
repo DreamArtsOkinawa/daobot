@@ -2,7 +2,11 @@ box: wercker/nodejs
 no-response-timeout: 15
 build:
   steps:
-    - npm-install
+    - script:
+        name: echo nodejs information
+        code: |
+          echo "node version $(node -v) running"
+          echo "npm version $(npm -v) running"
 
   after-steps:
     - wantedly/pretty-slack-notify:
