@@ -2,12 +2,12 @@
 #   Retrieve news related to public offer
 #
 # Commands:
-#   hubot okinawa boshu - get kobo lists
-#   hubot okinawa boshu kobo - get kobo lists
-#   hubot okinawa boshu nyusatsu - get nyusatsu lists
-#   hubot okinawa boshu new - get kobo has opened
-#   hubot okinawa boshu kobo new - get kobo has opened
-#   hubot okinawa boshu nyusatsu - get kobo nyusatsu opened
+#   hubot okinawa boshu - offer list
+#   hubot okinawa boshu kobo - kobo lists
+#   hubot okinawa boshu nyusatsu - nyusatsu lists
+#   hubot okinawa boshu new - offer has opened
+#   hubot okinawa boshu kobo new - kobo has opened
+#   hubot okinawa boshu nyusatsu - nyusatsu has opened
 #
 # Author:
 #   hiromiyagi
