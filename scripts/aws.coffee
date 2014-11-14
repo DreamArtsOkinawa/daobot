@@ -13,6 +13,7 @@
 #
 # Commands:
 #   hubot ec2 status - Returns the status of EC2 instances
+#   hubot ec2 status <name> - Returns the status of EC2 instance that matched <name>
 #
 # Notes:
 #   It's highly recommended to use a read-only IAM account for this purpose
@@ -21,7 +22,7 @@
 #   cloudwatch:GetMetricStatistics, cloudwatch:Describe*, autoscaling:Describe*
 #
 # Author:
-#   Iristyle
+#   Iristyle, miyaz
 
 key = process.env.HUBOT_AWS_ACCESS_KEY_ID
 secret = process.env.HUBOT_AWS_SECRET_ACCESS_KEY
@@ -39,6 +40,9 @@ getRegionInstances = (region, msg) ->
       msg.send "Failed to describe instances for region #{region} - error #{error}"
       return
 
+    filter_str = msg.match[1]
+    msg.send "filter by name : " + filter_str if filter_str
+
     ec2.setRegion(region).request 'DescribeInstanceStatus', (error, allStatuses) ->
       statuses = if error? then [] else allStatuses.instanceStatusSet.item
 
@@ -46,13 +50,29 @@ getRegionInstances = (region, msg) ->
       instances = _.pluck instances, 'instancesSet'
       instances = _.flatten _.pluck instances, 'item'
 
-      msg.send "Found #{instances.length} instances for region #{region}..."
+      if filter_str
+        find_cnt=0
+        for instance in instances
+          do (instance) ->
+            status = _.find statuses, (s) ->
+              instance.instanceId == s.instanceId
+            tags = _.flatten [instance.tagSet?.item ? []]
+            name = (_.find tags, (t) -> t.key == 'Name')?.value ? 'missing'
+            find_cnt++ if name.indexOf(filter_str) isnt -1
+        msg.send "Found #{find_cnt} instances for region #{region}..."
+
+      else
+        msg.send "Found #{instances.length} instances for region #{region}..."
 
       bot_speak = ''
       for instance in instances
         do (instance) ->
           status = _.find statuses, (s) ->
             instance.instanceId == s.instanceId
+
+          tags = _.flatten [instance.tagSet?.item ? []]
+          name = (_.find tags, (t) -> t.key == 'Name')?.value ? 'missing'
+
 
           suffix = ''
           state = instance.instanceState.name
@@ -93,17 +113,15 @@ getRegionInstances = (region, msg) ->
           arch = instance.architecture
           devType = instance.rootDeviceType
 
-          tags = _.flatten [instance.tagSet?.item ? []]
-          name = (_.find tags, (t) -> t.key == 'Name')?.value ? 'missing'
-
-          bot_speak += "#{prefix} [#{state}] - #{name} / #{type} / #{id}\n"
+          if not filter_str or name.indexOf(filter_str) isnt -1
+            bot_speak += "#{prefix} [#{state}] - #{name} / #{type} / #{id}\n"
 
       msg.send "#{bot_speak}" if instances.length > 0
 
-defaultRegions = 'ap-northeast-1,ap-southeast-1,sa-east-1,us-east-1,us-west-1,us-west-2,eu-west-1'
+#defaultRegions = 'ap-northeast-1,ap-southeast-1,sa-east-1,us-east-1,us-west-1,us-west-2,eu-west-1'
+defaultRegions = 'ap-northeast-1'
 
 module.exports = (robot) ->
-  robot.respond /(^|\W)ec2 status(\z|\W|$)/i, (msg) ->
+  robot.respond /ec2 status[ ]*([^ ]*).*$/i, (msg) ->
     regions = process.env?.HUBOT_AWS_EC2_REGIONS ? defaultRegions
     getRegionInstances region, msg for region in regions.split ','
-
