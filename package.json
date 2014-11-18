@@ -12,6 +12,7 @@
     "hubot": "^2.9.3",
     "hubot-help": "^0.1.1",
     "hubot-heroku-keepalive": "0.0.4",
+    "hubot-misawa": "0.0.3",
     "hubot-scripts": "^2.5.16",
     "hubot-slack": "^2.2.0",
     "hubot-sushiyuki": "0.0.8",
