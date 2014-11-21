@@ -1,4 +1,4 @@
-box: wercker/nodejs
+box: wercker/nodejs@1.4.0
 no-response-timeout: 15
 build:
   steps:
@@ -9,16 +9,12 @@ build:
           echo "npm version $(npm -v) running"
 
   after-steps:
-    - wantedly/pretty-slack-notify:
-        team: dao
-        token: $SLACK_API_TOKEN
-        channel: $SLACK_NOTIFY_CHANNEL
+    - wantedly/pretty-slack-notify@0.2.2:
+        webhook_url: $SLACK_WEBHOOK_URL
 deploy:
   steps:
     - heroku-deploy
 
   after-steps:
-    - wantedly/pretty-slack-notify:
-        team: dao
-        token: $SLACK_API_TOKEN
-        channel: $SLACK_NOTIFY_CHANNEL
+    - wantedly/pretty-slack-notify@0.2.2:
+        webhook_url: $SLACK_WEBHOOK_URL
