@@ -57,8 +57,8 @@ getRegionInstances = (region, msg) ->
             status = _.find statuses, (s) ->
               instance.instanceId == s.instanceId
             tags = _.flatten [instance.tagSet?.item ? []]
-            name = (_.find tags, (t) -> t.key == 'Name' and typeof t?.value == 'string')?.value or 'missing'
-            find_cnt++ if name?.indexOf(filter_str) isnt -1
+            name = (_.find tags, (t) -> t.key == 'Name')?.value ? 'missing'
+            find_cnt++ if name.indexOf(filter_str) isnt -1
         msg.send "Found #{find_cnt} instances for region #{region}..."
 
       else
@@ -71,7 +71,7 @@ getRegionInstances = (region, msg) ->
             instance.instanceId == s.instanceId
 
           tags = _.flatten [instance.tagSet?.item ? []]
-          name = (_.find tags, (t) -> t.key == 'Name' and typeof t?.value == 'string')?.value or 'missing'
+          name = (_.find tags, (t) -> t.key == 'Name')?.value ? 'missing'
 
 
           suffix = ''
@@ -113,7 +113,7 @@ getRegionInstances = (region, msg) ->
           arch = instance.architecture
           devType = instance.rootDeviceType
 
-          if not filter_str or name?.indexOf(filter_str) isnt -1
+          if not filter_str or name.indexOf(filter_str) isnt -1
             bot_speak += "#{prefix} [#{state}] - #{name} / #{type} / #{id}\n"
 
       msg.send "#{bot_speak}" if instances.length > 0
