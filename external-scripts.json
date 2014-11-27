@@ -3,5 +3,7 @@
   "hubot-heroku-keepalive",
   "hubot-sushiyuki",
   "hubot-misawa",
-  "hubot-thecat"
+  "hubot-thecat",
+  "hubot-shipit",
+  "hubot-pugme"
 ]
