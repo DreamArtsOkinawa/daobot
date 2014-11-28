@@ -6,7 +6,7 @@
 
 module.exports = (robot) ->
 
-  robot.respond /air (.+) (.+) (.+)/i, (msg) ->
+  robot.respond /air (.+)[\s　](.+)[\s　](.+)/i, (msg) ->
     from = msg.match[1]
     to = msg.match[2]
     date= msg.match[3]
