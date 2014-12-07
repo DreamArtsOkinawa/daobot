@@ -154,6 +154,7 @@ terminateInstances = (msg) ->
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
+    ownerName = ""
     if err
       console.log err, err.stack
     else
@@ -164,9 +165,17 @@ terminateInstances = (msg) ->
           tags = instances.Instances[0].Tags[tagidx]
           if tags.Key is "Name"
             instanceId = instances.Instances[0].InstanceId if msg.match[1] is tags.Value and InstanceState isnt "terminated"
+      for insidx of data.Reservations
+        instances = data.Reservations[insidx]
+        if instanceId is instances.Instances[0].InstanceId
+          for tagidx of instances.Instances[0].Tags 
+            tags = instances.Instances[0].Tags[tagidx]
+            ownerName = tags.Value if tags.Key is "Owner"
 
-    msg.send "not found instance[#{msg.match[1]}]" if instanceId is ""
+    msg.send "Not found instance[#{msg.match[1]}]" if instanceId is ""
     return if instanceId is ""
+    msg.send "Only owner can delete instance[#{msg.match[1]}]" if ownerName isnt msg.message.user.name
+    return if ownerName isnt msg.message.user.name
 
     params =
       InstanceIds: ["#{instanceId}"]
@@ -193,6 +202,7 @@ listInstances = (msg) ->
         return -1  if x < y
         0
 
+      messageStr = ""
       for insidx of data.Reservations
         instanceStr = ""
         instanceName = ""
@@ -212,12 +222,16 @@ listInstances = (msg) ->
         ImageId = instances.Instances[0].ImageId
         InstanceType = instances.Instances[0].InstanceType
         InstanceState = instances.Instances[0].State.Name
-        instanceStr += InstanceId + "\t/ "
-        instanceStr += ImageId + "\t/ "
-        instanceStr += InstanceType + "\t/ "
-        instanceStr += InstanceState + "\t/ "
-        instanceStr += "@" + ownerName if ownerName isnt ""
-        msg.send instanceStr if InstanceState isnt "terminated"
+        instanceStr += InstanceId + " / "
+        instanceStr += ImageId + " / "
+        instanceStr += InstanceType + " / "
+        instanceStr += InstanceState + " / "
+        if ownerName isnt ""
+          instanceStr += "@" + ownerName + "\n"
+        else
+          instanceStr += "\n"
+        messageStr += instanceStr if InstanceState isnt "terminated"
+      msg.send messageStr
     return
 
 module.exports = (robot) ->
