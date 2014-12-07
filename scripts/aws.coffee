@@ -13,7 +13,7 @@
 #
 # Commands:
 #   hubot ec2 status - Returns the status of EC2 instances
-#   hubot ec2 status <name> - Returns the status of EC2 instance that matched <name>
+#   hubot ec2 status <filterStr> - Returns the status of EC2 instance that matched <filterStr>
 #
 # Notes:
 #   It's highly recommended to use a read-only IAM account for this purpose
@@ -41,7 +41,7 @@ getRegionInstances = (region, msg) ->
       return
 
     filter_str = msg.match[1]
-    msg.send "filter by name : " + filter_str if filter_str
+    msg.send "filter by \"" + filter_str + "\"" if filter_str
 
     ec2.setRegion(region).request 'DescribeInstanceStatus', (error, allStatuses) ->
       statuses = if error? then [] else allStatuses.instanceStatusSet.item
