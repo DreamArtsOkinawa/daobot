@@ -75,7 +75,6 @@ runInstances = (msg) ->
     ec2.createTags params, (err) ->
       msg.send err if err
       return
-    return
 
     reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を作成中です\n"
     reply += "5分程待って下記にアクセスしてください\n"
@@ -84,6 +83,7 @@ runInstances = (msg) ->
     reply += "SSH rootユーザアクセス (root:dss#dev)  #{instanceName}.dev.diol.jp:22\n"
     reply += "    ->Chrome SecureShell用URL  chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22"
     msg.send reply
+    return
 
 startInstances = (msg) ->
   params = {}
