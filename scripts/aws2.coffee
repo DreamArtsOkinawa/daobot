@@ -35,8 +35,8 @@ ec2 = new AWS.EC2()
 runInstances = (msg) ->
   params =
     ImageId: msg.match[2] if msg.match[2]
-    ImageId: "ami-57494c56" if not msg.match[2]
-    InstanceType: "m1.medium"
+    ImageId: "ami-8c63618d" if not msg.match[2]
+    InstanceType: "t2.medium"
     MinCount: 1
     MaxCount: 1
     KeyName: "dssdev"
@@ -113,11 +113,11 @@ startInstances = (msg) ->
         msg.send "Could not start instance", err
         return
       return
-    return
 
     reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を起動中です\n"
     reply += "5分程待って利用開始してください"
     msg.send reply
+    return
 
 stopInstances = (msg) ->
   params = {}
@@ -180,7 +180,6 @@ terminateInstances = (msg) ->
       msg.send "@#{msg.message.user.name}: インスタンス[#{instanceName}]を削除中です"
       return
     return
-
 
 listInstances = (msg) ->
   params = {}
