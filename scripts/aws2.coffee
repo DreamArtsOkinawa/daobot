@@ -35,7 +35,7 @@ ec2 = new AWS.EC2()
 runInstances = (msg) ->
   params =
     ImageId: msg.match[2] if msg.match[2]
-    ImageId: "ami-8c63618d" if not msg.match[2]
+    ImageId: "ami-d26361d3" if not msg.match[2]
     InstanceType: "t2.medium"
     MinCount: 1
     MaxCount: 1
@@ -57,7 +57,6 @@ runInstances = (msg) ->
       msg.send "Could not create instance", err
       return
     instanceId = data.Instances[0].InstanceId
-    msg.send "@#{msg.message.user.name}: Instance[#{instanceName} / #{instanceId}] creation start"
   
     # Add tags to the instance
     params =
@@ -80,7 +79,7 @@ runInstances = (msg) ->
     reply += "5分程待って下記にアクセスしてください\n"
     reply += "Web 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
     reply += "Web 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
-    reply += "SSH rootユーザアクセス (root:dss#dev)  #{instanceName}.dev.diol.jp:22\n"
+    reply += "SSH rootユーザアクセス (root:dss#dev)  ssh://#{instanceName}.dev.diol.jp:22\n"
     reply += "    ->Chrome SecureShell用URL  chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22"
     msg.send reply
     return
