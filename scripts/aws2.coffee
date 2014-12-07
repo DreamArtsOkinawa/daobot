@@ -227,7 +227,7 @@ listInstances = (msg) ->
         instanceStr += InstanceType + " / "
         instanceStr += InstanceState + " / "
         if ownerName isnt ""
-          instanceStr += "@" + ownerName + "\n"
+          instanceStr += ownerName + "\n"
         else
           instanceStr += "\n"
         messageStr += instanceStr if InstanceState isnt "terminated"
