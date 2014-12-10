@@ -33,6 +33,9 @@ AWS.config.update({region: 'ap-northeast-1', accessKeyId: key, secretAccessKey: 
 ec2 = new AWS.EC2()
 
 runInstances = (msg) ->
+  if msg.message.room isnt "testroom"
+    msg.send "そのコマンドは #testroom でやってね"
+    return
   params =
     ImageId: msg.match[2] if msg.match[2]
     ImageId: "ami-d26361d3" if not msg.match[2]
@@ -86,6 +89,9 @@ runInstances = (msg) ->
 
 startInstances = (msg) ->
   params = {}
+  if msg.message.room isnt "testroom"
+    msg.send "そのコマンドは #testroom でやってね"
+    return
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
@@ -114,12 +120,15 @@ startInstances = (msg) ->
       return
 
     reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を起動中です\n"
-    reply += "5分程待って利用開始してください"
+    reply += "5分程待って利用開始してください => http://#{instanceName}.dev.diol.jp/"
     msg.send reply
     return
 
 stopInstances = (msg) ->
   params = {}
+  if msg.message.room isnt "testroom"
+    msg.send "そのコマンドは #testroom でやってね"
+    return
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
@@ -151,6 +160,9 @@ stopInstances = (msg) ->
 
 terminateInstances = (msg) ->
   params = {}
+  if msg.message.room isnt "testroom"
+    msg.send "そのコマンドは #testroom でやってね"
+    return
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
@@ -191,6 +203,9 @@ terminateInstances = (msg) ->
 
 listInstances = (msg) ->
   params = {}
+  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #testroom でやってね"
+    return
   ec2.describeInstances params, (err, data) ->
     if err
       console.log err, err.stack
