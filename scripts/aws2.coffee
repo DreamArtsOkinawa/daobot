@@ -96,7 +96,7 @@ startInstances = (msg) ->
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
     if err
-      console.log err, err.stack
+      msg.send err
     else
       for insidx of data.Reservations
         instances = data.Reservations[insidx]
@@ -127,13 +127,14 @@ startInstances = (msg) ->
 stopInstances = (msg) ->
   params = {}
   if msg.message.room isnt "testroom"
+      InstanceIds: ["#{instanceId}"]
     msg.send "そのコマンドは #testroom でやってね"
     return
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
     if err
-      console.log err, err.stack
+      msg.send err
     else
       for insidx of data.Reservations
         instances = data.Reservations[insidx]
@@ -168,7 +169,7 @@ terminateInstances = (msg) ->
     instanceId = ""
     ownerName = ""
     if err
-      console.log err, err.stack
+      msg.send err
     else
       for insidx of data.Reservations
         instances = data.Reservations[insidx]
@@ -208,7 +209,7 @@ listInstances = (msg) ->
     return
   ec2.describeInstances params, (err, data) ->
     if err
-      console.log err, err.stack
+      msg.send err
     else
       data.Reservations.sort (a, b) ->
         x = a.Instances[0].Tags[0].Value
