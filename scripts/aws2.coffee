@@ -33,7 +33,7 @@ AWS.config.update({region: 'ap-northeast-1', accessKeyId: key, secretAccessKey: 
 ec2 = new AWS.EC2()
 
 runInstances = (msg) ->
-  if msg.message.room isnt "testroom"
+  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
     msg.send "そのコマンドは #testroom でやってね"
     return
   params =
@@ -88,10 +88,10 @@ runInstances = (msg) ->
     return
 
 startInstances = (msg) ->
-  params = {}
-  if msg.message.room isnt "testroom"
+  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
     msg.send "そのコマンドは #testroom でやってね"
     return
+  params = {}
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
@@ -125,11 +125,10 @@ startInstances = (msg) ->
     return
 
 stopInstances = (msg) ->
-  params = {}
-  if msg.message.room isnt "testroom"
-      InstanceIds: ["#{instanceId}"]
+  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
     msg.send "そのコマンドは #testroom でやってね"
     return
+  params = {}
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
@@ -160,10 +159,10 @@ stopInstances = (msg) ->
     return
 
 terminateInstances = (msg) ->
-  params = {}
-  if msg.message.room isnt "testroom"
+  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
     msg.send "そのコマンドは #testroom でやってね"
     return
+  params = {}
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
@@ -203,10 +202,10 @@ terminateInstances = (msg) ->
     return
 
 listInstances = (msg) ->
-  params = {}
   if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
     msg.send "そのコマンドは #testroom でやってね"
     return
+  params = {}
   ec2.describeInstances params, (err, data) ->
     if err
       msg.send err
