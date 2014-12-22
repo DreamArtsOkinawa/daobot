@@ -260,3 +260,4 @@ module.exports = (robot) ->
     terminateInstances msg
   robot.respond /ec2 list[ ]*$/i, (msg) ->
     listInstances msg
+
