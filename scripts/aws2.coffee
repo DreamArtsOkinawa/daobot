@@ -95,6 +95,7 @@ startInstances = (msg) ->
   instanceName = msg.match[1]
   ec2.describeInstances params, (err, data) ->
     instanceId = ""
+    ownerName = ""
     if err
       msg.send err
     else
@@ -105,6 +106,12 @@ startInstances = (msg) ->
           tags = instances.Instances[0].Tags[tagidx]
           if tags.Key is "Name"
             instanceId = instances.Instances[0].InstanceId if msg.match[1] is tags.Value and InstanceState is "stopped"
+      for insidx of data.Reservations
+        instances = data.Reservations[insidx]
+        if instanceId is instances.Instances[0].InstanceId
+          for tagidx of instances.Instances[0].Tags 
+            tags = instances.Instances[0].Tags[tagidx]
+            ownerName = tags.Value if tags.Key is "Owner"
 
     msg.send "not found instance[#{msg.match[1]}] in stopped" if instanceId is ""
     return if instanceId is ""
@@ -120,7 +127,7 @@ startInstances = (msg) ->
       return
 
     reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を起動中です\n"
-    reply += "5分程待って利用開始してください => http://#{instanceName}.dev.diol.jp/"
+    reply += "5分程待って利用開始してください => http://#{instanceName}.dev.diol.jp/" if ownerName is msg.message.user.name
     msg.send reply
     return
 
