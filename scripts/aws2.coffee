@@ -10,8 +10,8 @@
 #   HUBOT_AWS_EC2_REGIONS
 #
 # Commands:
-#   hubot ec2 list - Show EC2 instace list. only SAKUTTO_KOUTIKU Servers.
-#   hubot ec2 list ami - Show AMI list.
+#   hubot ec2 list - Show EC2 instace list. for SAKUTTO_KOUTIKU.
+#   hubot ec2 list ami - Show AMI list. for SAKUTTO_KOUTIKU.
 #   hubot ec2 create <instanceName> <amiName> - Create the EC2 instance. Set <instanceName> to Tags:Name
 #   hubot ec2 start <instanceName> - Start the EC2 instance.
 #   hubot ec2 stop <instanceName> - Stop the EC2 instance.
@@ -254,6 +254,28 @@ listInstances = (msg) ->
       msg.send messageStr
     return
 
+listAMIs = (msg) ->
+  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #testroom でやってね"
+    return
+  params = { Owners: [ "self" ] }
+  ec2.describeImages params, (err, data) ->
+    if err
+      msg.send err
+    else
+      messageStr = ""
+      for imgidx of data.Images
+        image = data.Images[imgidx]
+        imageDesc = ""
+        imageId = image.ImageId
+        for tagidx of image.Tags
+          tags = image.Tags[tagidx]
+          imageDesc = tags.Value if tags.Key is "Description" and tags.Value isnt ""
+        continue if imageDesc is ""
+        messageStr += imageId + " => " + imageDesc + "\n"
+      msg.send messageStr
+    return
+
 module.exports = (robot) ->
   robot.respond /ec2 create +([^ ]+) *([^ ]*).*$/i, (msg) ->
     runInstances msg
@@ -263,6 +285,7 @@ module.exports = (robot) ->
     startInstances msg
   robot.respond /ec2 destroy +([^ ]+).*$/i, (msg) ->
     terminateInstances msg
-  robot.respond /ec2 list[ ]*$/i, (msg) ->
+  robot.respond /ec2 list$/i, (msg) ->
     listInstances msg
-
+  robot.respond /ec2 list ami$/i, (msg) ->
+    listAMIs msg
