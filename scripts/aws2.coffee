@@ -10,7 +10,7 @@
 #   HUBOT_AWS_EC2_REGIONS
 #
 # Commands:
-#   hubot ec2 list - Show EC2 instace list.
+#   hubot ec2 list - Show EC2 instace list. only SAKUTTO_KOUTIKU Servers.
 #   hubot ec2 list ami - Show AMI list.
 #   hubot ec2 create <instanceName> <amiName> - Create the EC2 instance. Set <instanceName> to Tags:Name
 #   hubot ec2 start <instanceName> - Start the EC2 instance.
@@ -236,6 +236,7 @@ listInstances = (msg) ->
             instanceName = tags.Value
           if tags.Key is "Owner"
             ownerName = tags.Value
+        continue if ownerName is ""
         if instanceName is ""
           instanceStr += "undefined" + "\t/ "
         else
@@ -248,11 +249,8 @@ listInstances = (msg) ->
         instanceStr += ImageId + " / "
         instanceStr += InstanceType + " / "
         instanceStr += InstanceState + " / "
-        if ownerName isnt ""
-          instanceStr += ownerName + "\n"
-        else
-          instanceStr += "\n"
-        messageStr += instanceStr if InstanceState isnt "terminated"
+        instanceStr += ownerName + "\n"
+        messageStr += instanceStr
       msg.send messageStr
     return
 
