@@ -49,10 +49,10 @@ runInstances = (msg) ->
   params =
     Owners: [ "self" ]
   ec2.describeImages params, (err, data) ->
+    ami_hash = {}
     if err
       msg.send err
     else
-      ami_hash = {}
       for imgidx of data.Images
         image = data.Images[imgidx]
         imageSpec = ""
@@ -71,56 +71,75 @@ runInstances = (msg) ->
       ami_use_desc = ami_hash[ami_use]
 
     params =
-      ImageId: ami_use
-      InstanceType: "t2.medium"
-      MinCount: 1
-      MaxCount: 1
-      KeyName: "dssdev"
-      IamInstanceProfile: {
-        Arn: 'arn:aws:iam::566109878544:instance-profile/slack-miyaz'
-      }
-      NetworkInterfaces: [
-        DeviceIndex: 0
-        AssociatePublicIpAddress: true
-        SubnetId: "subnet-4ee5e63a"
-        Groups: [ "sg-1f7f9b7a" ]
+      DryRun: false
+      Filters: [
+        Name: "resource-type"
+        Values: [ "instance" ]
       ]
-    instanceName = msg.match[1]
-
-    # Create the instance
-    ec2.runInstances params, (err, data) ->
+    ec2.describeTags params, (err, data) ->
+      exist_flg = false
       if err
-        msg.send "Could not create instance", err
-        return
-      instanceId = data.Instances[0].InstanceId
-  
-      # Add tags to the instance
-      params =
-        Resources: [instanceId]
-        Tags: [
-          {
-            Key: "Name"
-            Value: instanceName
-          }
-          {
-            Key: "Owner"
-            Value: "#{msg.message.user.name}"
-          }
-        ]
-      ec2.createTags params, (err) ->
-        msg.send err if err
+        msg.send err
+      else
+        for tagidx of data.Tags
+          tag = data.Tags[tagidx]
+          if tag.Key is "Name" and tag.Value is msg.match[1]
+            exist_flg = true
+      if exist_flg
+        msg.send "すでに同名のインスタンスが存在します"
         return
 
-      reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を作成中です\n"
-      reply += "  AMI ID  ：" + ami_use + "\n"
-      reply += "  AMI Spec：" + ami_use_desc + "\n\n"
-      reply += "5分程待って下記にアクセスしてください\n"
-      reply += "Web 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
-      reply += "Web 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
-      reply += "SSH rootユーザアクセス (root:dss#dev)  ssh://#{instanceName}.dev.diol.jp:22\n"
-      reply += "    ->Chrome SecureShell用URL  chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22"
-      msg.send reply
-      return
+      params =
+        ImageId: ami_use
+        InstanceType: "t2.medium"
+        MinCount: 1
+        MaxCount: 1
+        KeyName: "dssdev"
+        IamInstanceProfile: {
+          Arn: 'arn:aws:iam::566109878544:instance-profile/slack-miyaz'
+        }
+        NetworkInterfaces: [
+          DeviceIndex: 0
+          AssociatePublicIpAddress: true
+          SubnetId: "subnet-4ee5e63a"
+          Groups: [ "sg-1f7f9b7a" ]
+        ]
+      instanceName = msg.match[1]
+  
+      # Create the instance
+      ec2.runInstances params, (err, data) ->
+        if err
+          msg.send "Could not create instance", err
+          return
+        instanceId = data.Instances[0].InstanceId
+    
+        # Add tags to the instance
+        params =
+          Resources: [instanceId]
+          Tags: [
+            {
+              Key: "Name"
+              Value: instanceName
+            }
+            {
+              Key: "Owner"
+              Value: "#{msg.message.user.name}"
+            }
+          ]
+        ec2.createTags params, (err) ->
+          msg.send err if err
+          return
+  
+        reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を作成中です\n"
+        reply += "  AMI ID  ：" + ami_use + "\n"
+        reply += "  AMI Spec：" + ami_use_desc + "\n\n"
+        reply += "5分程待って下記にアクセスしてください\n"
+        reply += "Web 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
+        reply += "Web 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
+        reply += "SSH rootユーザアクセス (root:dss#dev)  ssh://#{instanceName}.dev.diol.jp:22\n"
+        reply += "    ->Chrome SecureShell用URL  chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22"
+        msg.send reply
+        return
 
 startInstances = (msg) ->
   if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
@@ -320,7 +339,7 @@ module.exports = (robot) ->
     startInstances msg
   robot.respond /ec2 destroy +([^ ]+).*$/i, (msg) ->
     terminateInstances msg
-  robot.respond /ec2 list$/i, (msg) ->
+  robot.respond /ec2 list *$/i, (msg) ->
     listInstances msg
-  robot.respond /ec2 list ami$/i, (msg) ->
+  robot.respond /ec2 list +ami *$/i, (msg) ->
     listAMIs msg
