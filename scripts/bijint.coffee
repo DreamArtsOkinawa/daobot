@@ -76,7 +76,7 @@ module.exports = (robot) ->
     hhmm = msg.match[2]
     msg.send getBijin(area, hhmm)
 
-  new cronJob('00 00 09,12,18 * * 1-5', () ->
-    area = areas[Math.floor(Math.random() * ((areas.length - 1) + 1))][1]
-    robot.send {room: "#{process.env.BIJINT_CRON_ROOM}"}, getBijin(area, dateformat(new Date, 'HHMM'))
-  ).start()
+#  new cronJob('00 00 09,12,18 * * 1-5', () ->
+#    area = areas[Math.floor(Math.random() * ((areas.length - 1) + 1))][1]
+#    robot.send {room: "#{process.env.BIJINT_CRON_ROOM}"}, getBijin(area, dateformat(new Date, 'HHMM'))
+#  ).start()
