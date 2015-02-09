@@ -134,8 +134,9 @@ runInstances = (msg) ->
         reply += "  AMI ID  ：" + ami_use + "\n"
         reply += "  AMI Spec：" + ami_use_desc + "\n\n"
         reply += "5分程待って下記にアクセスしてください\n"
-        reply += "Web 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
-        reply += "Web 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
+        reply += "SDB 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/hibiki/Login.do\n"
+        reply += "ISE 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
+        reply += "ISE 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
         reply += "SSH rootユーザアクセス (root:dss#dev)  ssh://#{instanceName}.dev.diol.jp:22\n"
         reply += "    ->Chrome SecureShell用URL  chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22"
         msg.send reply
@@ -181,7 +182,12 @@ startInstances = (msg) ->
       return
 
     reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を起動中です\n"
-    reply += "5分程待って利用開始してください => http://#{instanceName}.dev.diol.jp/" if ownerName is msg.message.user.name
+    reply += "5分程待って下記にアクセスしてください\n"
+    reply += "SDB 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/hibiki/Login.do\n"
+    reply += "ISE 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
+    reply += "ISE 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
+    reply += "SSH rootユーザアクセス (root:dss#dev)  ssh://#{instanceName}.dev.diol.jp:22\n"
+    reply += "    ->Chrome SecureShell用URL  chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22"
     msg.send reply
     return
 
