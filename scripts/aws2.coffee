@@ -38,7 +38,7 @@ runInstances = (msg) ->
     return
 
   # default ami
-  ami_use = "ami-d26361d3"
+  ami_use = "ami-3145ae31"
   ami_use_desc = ""
 
   # check AMI-ID in args
