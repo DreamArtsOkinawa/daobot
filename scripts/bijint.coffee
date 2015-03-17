@@ -59,7 +59,7 @@ module.exports = (robot) ->
   getBijin = (area, hhmm = "#{dateformat(new Date, 'HHMM')}") ->
     unless Math.max(0, parseInt(hhmm[..1])) < 24 and Math.max(0, parseInt(hhmm[2..])) < 60
       hhmm = "#{dateformat(new Date, 'HHMM')}"
-    return "http://www.bijint.com/#{area}/tokei_images/#{hhmm}.jpg"
+    return "http://www.bijint.com/assets/pict/#{area}/pc/#{hhmm}.jpg"
 
   getArea = (area) ->
     filtered = areas.filter((a) => area in a).pop()
