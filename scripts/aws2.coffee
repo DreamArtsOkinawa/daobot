@@ -1,5 +1,5 @@
 # Description:
-#   Sakutto Koutiku
+#   Sakutto Kouchiku
 #   Queries for the status of AWS services
 #
 # Dependencies:
