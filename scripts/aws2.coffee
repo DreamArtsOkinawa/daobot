@@ -132,6 +132,7 @@ runInstances = (msg) ->
           return
   
         reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を作成中です\n"
+        reply += "今月使いすぎなので控えめに\n"
         reply += "  AMI ID  ：" + ami_use + "\n"
         reply += "  AMI Spec：" + ami_use_desc + "\n\n"
         reply += "5分程待って下記にアクセスしてください\n"
