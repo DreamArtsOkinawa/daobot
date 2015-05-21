@@ -187,10 +187,10 @@ startInstances = (msg) ->
       return
 
     reply =  "@#{msg.message.user.name}: インスタンス[#{instanceName}]を起動中です(5分ほどかかります)\n"
-    reply += "　アクセス：<http://#{instanceName}.dev.diol.jp/hibiki/Login.do|Sm@rtDB> "
-    reply += "<http://#{instanceName}.dev.diol.jp/|INSUITE> "
-    reply += "<http://#{instanceName}.dev.diol.jp:8001/|INSUITE管理> "
-    reply += "<chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22|SSH>"
+    reply += "　アクセス： http://#{instanceName}.dev.diol.jp/hibiki/Login.do|Sm@rtDB "
+    reply += "http://#{instanceName}.dev.diol.jp/|INSUITE "
+    reply += "http://#{instanceName}.dev.diol.jp:8001/|INSUITE管理 "
+    reply += "chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#root@#{instanceName}.dev.diol.jp:22|SSH 　"
     #reply += "SDB 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/hibiki/Login.do\n"
     #reply += "ISE 一般ユーザアクセス (test01:test01) http://#{instanceName}.dev.diol.jp/\n"
     #reply += "ISE 管理ユーザアクセス (insuite:admin) http://#{instanceName}.dev.diol.jp:8001/\n"
