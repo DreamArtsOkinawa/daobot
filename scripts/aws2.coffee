@@ -280,8 +280,15 @@ listInstances = (msg) ->
       msg.send err
     else
       data.Reservations.sort (a, b) ->
-        x = a.Instances[0].Tags[0].Value
-        y = b.Instances[0].Tags[0].Value
+        x = y = ""
+        for tagidx of a.Instances[0].Tags
+          tags = a.Instances[0].Tags[tagidx]
+          if tags.Key is "Name"
+            x = tags.Value
+        for tagidx of b.Instances[0].Tags
+          tags = b.Instances[0].Tags[tagidx]
+          if tags.Key is "Name"
+            y = tags.Value
         return 1  if x > y
         return -1  if x < y
         0
