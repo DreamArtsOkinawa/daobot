@@ -293,7 +293,7 @@ listInstances = (msg) ->
         return -1  if x < y
         0
 
-      messageStr = ""
+      messageStr = "```\n"
       for insidx of data.Reservations
         instanceStr = ""
         instanceName = ""
@@ -306,20 +306,19 @@ listInstances = (msg) ->
           if tags.Key is "Owner"
             ownerName = tags.Value
         continue if ownerName is ""
-        if instanceName is ""
-          instanceStr += "undefined" + "\t/ "
-        else
-          instanceStr += instanceName + ((if tags.Value.length < 11 then "\t/ " else "/ "))
-        InstanceId = instances.Instances[0].InstanceId
-        ImageId = instances.Instances[0].ImageId
-        InstanceType = instances.Instances[0].InstanceType
+        instanceName  = "undefined" if instanceName is ""
+        instanceStr  += paddingright(instanceName, " ", 15) + " / "
+        InstanceId    = instances.Instances[0].InstanceId
+        ImageId       = instances.Instances[0].ImageId
+        InstanceType  = instances.Instances[0].InstanceType
         InstanceState = instances.Instances[0].State.Name
-        instanceStr += InstanceId + " / "
-        instanceStr += ImageId + " / "
-        instanceStr += InstanceType + " / "
-        instanceStr += InstanceState + " / "
-        instanceStr += ownerName + "\n"
-        messageStr += instanceStr
+        instanceStr  += InstanceId + " / "
+        instanceStr  += ImageId + " / "
+        instanceStr  += InstanceType + " / "
+        instanceStr  += InstanceState + " / "
+        instanceStr  += ownerName + "\n"
+        messageStr   += instanceStr
+      messageStr += "```"
       msg.send messageStr
     return
 
@@ -344,6 +343,11 @@ listAMIs = (msg) ->
         messageStr += imageId + " => " + imageSpec + "\n"
       msg.send messageStr
     return
+
+paddingright = (val, char, n) ->
+  while val.length < n
+    val += char
+  val
 
 module.exports = (robot) ->
   robot.respond /ec2 create +([^ ]+) *([^ ]*).*$/i, (msg) ->
