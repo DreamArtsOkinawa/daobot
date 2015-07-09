@@ -21,7 +21,8 @@
     "hubot-thecat": "^1.0.1",
     "moment": "^2.8.3",
     "request": "^2.47.0",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "hubot-weather-ja": "^0.0.1"
   },
   "engines": {
     "node": "0.10.x"
