@@ -312,10 +312,15 @@ listInstances = (msg) ->
         ImageId       = instances.Instances[0].ImageId
         InstanceType  = instances.Instances[0].InstanceType
         InstanceState = instances.Instances[0].State.Name
+        PublicIpAddr  = instances.Instances[0].PublicIpAddress
         instanceStr  += InstanceId + " / "
         instanceStr  += ImageId + " / "
-        instanceStr  += InstanceType + " / "
+        instanceStr  += paddingright(InstanceType, " ", 9) + " / "
         instanceStr  += InstanceState + " / "
+        if PublicIpAddr?
+          instanceStr  += paddingright(PublicIpAddr, " ", 14) + " / "
+        else
+          instanceStr  += "not associated / "
         instanceStr  += ownerName + "\n"
         messageStr   += instanceStr
       messageStr += "```"
