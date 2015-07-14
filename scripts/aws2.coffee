@@ -112,7 +112,10 @@ runInstances = (msg) ->
           Groups: [ "sg-1f7f9b7a" ]
         ]
       instanceName = msg.match[1]
-  
+      if instanceName.match(/[^0-9a-zA-Z\-]/) != null
+        msg.send "インスタンス名には、英数字及びハイフンのみ使用できます"
+        return
+
       # Create the instance
       ec2.runInstances params, (err, data) ->
         if err
