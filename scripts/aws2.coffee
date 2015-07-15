@@ -34,8 +34,8 @@ AWS.config.update({region: 'ap-northeast-1', accessKeyId: key, secretAccessKey: 
 ec2 = new AWS.EC2()
 
 runInstances = (msg) ->
-  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
-    msg.send "そのコマンドは #testroom でやってね"
+  if msg.message.room isnt "e-support" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #e-support でやってね"
     return
 
   # default ami
@@ -150,8 +150,8 @@ runInstances = (msg) ->
         return
 
 startInstances = (msg) ->
-  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
-    msg.send "そのコマンドは #testroom でやってね"
+  if msg.message.room isnt "e-support" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #e-support でやってね"
     return
   params = {}
   instanceName = msg.match[1]
@@ -197,8 +197,8 @@ startInstances = (msg) ->
     return
 
 stopInstances = (msg) ->
-  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
-    msg.send "そのコマンドは #testroom でやってね"
+  if msg.message.room isnt "e-support" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #e-support でやってね"
     return
   params = {}
   instanceName = msg.match[1]
@@ -231,8 +231,8 @@ stopInstances = (msg) ->
     return
 
 terminateInstances = (msg) ->
-  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
-    msg.send "そのコマンドは #testroom でやってね"
+  if msg.message.room isnt "e-support" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #e-support でやってね"
     return
   params = {}
   instanceName = msg.match[1]
@@ -274,8 +274,8 @@ terminateInstances = (msg) ->
     return
 
 listInstances = (msg) ->
-  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
-    msg.send "そのコマンドは #testroom でやってね"
+  if msg.message.room isnt "e-support" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #e-support でやってね"
     return
   params = {}
   ec2.describeInstances params, (err, data) ->
@@ -331,8 +331,8 @@ listInstances = (msg) ->
     return
 
 listAMIs = (msg) ->
-  if msg.message.room isnt "testroom" and msg.message.room isnt "Shell"
-    msg.send "そのコマンドは #testroom でやってね"
+  if msg.message.room isnt "e-support" and msg.message.room isnt "Shell"
+    msg.send "そのコマンドは #e-support でやってね"
     return
   params = { Owners: [ "self" ] }
   ec2.describeImages params, (err, data) ->
