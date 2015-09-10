@@ -343,10 +343,13 @@ listAMIs = (msg) ->
       for imgidx of data.Images
         image = data.Images[imgidx]
         imageSpec = ""
+        imageDesc = ""
         imageId = image.ImageId
         for tagidx of image.Tags
           tags = image.Tags[tagidx]
           imageSpec = tags.Value if tags.Key is "Spec" and tags.Value isnt ""
+          imageDesc = tags.Value if tags.Key is "Desc" and tags.Value isnt ""
+        continue if imageDesc isnt ""
         continue if imageSpec is ""
         messageStr += imageId + " => " + imageSpec + "\n"
       msg.send messageStr
