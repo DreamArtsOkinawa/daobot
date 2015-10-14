@@ -168,6 +168,12 @@ startInstances = (msg) ->
           tags = instances.Instances[0].Tags[tagidx]
           if tags.Key is "Name"
             instanceId = instances.Instances[0].InstanceId if msg.match[1] is tags.Value and InstanceState is "stopped"
+        if instanceId isnt ""
+          for tagidx of instances.Instances[0].Tags
+            tags = instances.Instances[0].Tags[tagidx]
+            if tags.Key is "Spec"
+              msg.send "このインスタンスにはpopyコマンドを使用してください"
+              return
       for insidx of data.Reservations
         instances = data.Reservations[insidx]
         if instanceId is instances.Instances[0].InstanceId
@@ -214,6 +220,12 @@ stopInstances = (msg) ->
           tags = instances.Instances[0].Tags[tagidx]
           if tags.Key is "Name"
             instanceId = instances.Instances[0].InstanceId if msg.match[1] is tags.Value and InstanceState is "running"
+        if instanceId isnt ""
+          for tagidx of instances.Instances[0].Tags
+            tags = instances.Instances[0].Tags[tagidx]
+            if tags.Key is "Spec"
+              msg.send "このインスタンスにはpopyコマンドを使用してください"
+              return
 
     msg.send "not found instance[#{msg.match[1]}] in running" if instanceId is ""
     return if instanceId is ""
