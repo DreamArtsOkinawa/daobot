@@ -15,7 +15,7 @@ module.exports = (robot) ->
     user_image = robot.brain.data.userImages[user_id]
     if message.length > 0
       message = encodeURIComponent(message)
-      request = msg.http("https://slack.com/api/chat.postMessage?token=#{process.env.SLACK_API_TOKEN}&channel=%2301_timeline&text=#{message}%20(at%20%23#{channel}%20)&username=#{username}&link_names=0&pretty=1&icon_url=#{user_image}").get()
+      request = msg.http("https://slack.com/api/chat.postMessage?token=#{process.env.HUBOT_SLACK_TOKEN}&channel=%2301_timeline&text=#{message}%20(at%20%23#{channel}%20)&username=#{username}&link_names=0&pretty=1&icon_url=#{user_image}").get()
       request (err, res, body) ->
 
   reloadUserImages = (robot, user_id) ->
@@ -24,7 +24,7 @@ module.exports = (robot) ->
 
     return if robot.brain.data.userImages[user_id] != ""
     options =
-      url: "https://slack.com/api/users.list?token=#{process.env.SLACK_API_TOKEN}&pretty=1"
+      url: "https://slack.com/api/users.list?token=#{process.env.HUBOT_SLACK_TOKEN}&pretty=1"
       timeout: 2000
       headers: {}
 
