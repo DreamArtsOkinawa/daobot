@@ -6,5 +6,6 @@
   "hubot-thecat",
   "hubot-shipit",
   "hubot-pugme",
-  "hubot-weather-ja"
+  "hubot-weather-ja",
+  "hubot-slack-timeline"
 ]
