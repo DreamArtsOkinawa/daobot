@@ -17,6 +17,9 @@ module.exports = (robot) ->
     message = msg.message.text
     username = msg.message.user.name
     user_id = msg.message.user.id
+    ignore_channels = if process.env.SLACK_TIMELINE_IGNORE_CHANNELS then process.env.SLACK_TIMELINE_IGNORE_CHANNELS else 'dummy'
+    for ignore_channel in ignore_channels.split ','
+      return if ignore_channel is channel
     reloadUserImages(robot, user_id)
     user_image = robot.brain.data.userImages[user_id]
     if message.length > 0
