@@ -1,10 +1,8 @@
 [
   "hubot-help",
   "hubot-heroku-keepalive",
-  "hubot-sushiyuki",
   "hubot-misawa",
   "hubot-thecat",
-  "hubot-shipit",
   "hubot-pugme",
   "hubot-weather-ja"
 ]
